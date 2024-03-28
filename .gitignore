@@ -1,4 +1,4 @@
-files/jeroenlife-cert.pem
-files/cloudflare.crt
-files/jeroen-key.pem
+ansible/files/certs/jeroenlife-cert.pem
+ansible/files/certs/cloudflare.crt
+ansible/files/certs/jeroen-key.pem
 .terraform

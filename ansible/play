@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#CURRDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+#FALLBACKHOST=$(cat $CURRDIR/../droplet_ip.txt)
+PLAYBOOK=$1
+#HOST=${2:-$FALLBACKHOST}
+
+ansible-playbook playbooks/$PLAYBOOK.yaml -l fluwide "${@:2}"

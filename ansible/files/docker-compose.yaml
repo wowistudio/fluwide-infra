@@ -1,0 +1,70 @@
+version: "3"
+
+services:
+  fluwide:
+    image: jphuisman92/fluwide:latest
+    restart: "no"
+    ports:
+      - "3000:3000"
+
+  life:
+    image: jphuisman92/jeroenlife:latest
+    restart: "no"
+    ports:
+      - "4000:3000"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6380:6379"
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: &PG_DB palate
+      POSTGRES_USER: &PG_USER postgres
+      POSTGRES_PASSWORD: &PG_PASS password
+    ports:
+      - "3306:5432"
+    stdin_open: true
+    tty: true
+
+  palate-api:
+    &palate-api
+    image: jphuisman92/palate:latest
+    entrypoint: [""]
+    restart: "no"
+    command: pm runserver 0.0.0.0:9000
+    stdin_open: true
+    tty: true
+    ports:
+      - "9000:9000"
+    environment:
+      UWSGI_PROCESSES: 4
+      # Django and application settings
+      DJANGO_SETTINGS_MODULE: palate.settings.dev
+      SECRET_KEY: secret
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      # Database
+      DB_HOST: db
+      DB_NAME: *PG_DB
+      DB_USER: *PG_USER
+      DB_PASS: *PG_PASS
+      DB_PORT: 5432
+      # REDIS
+      CELERY_RESULT_BACKEND: redis://redis/0
+      CELERY_BROKER_URL: redis://redis/0
+    env_file:
+      - /root/.env
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./backend:/app/code:z
+
+  palate-worker:
+    <<: *palate-api
+    image: jphuisman92/palate:latest
+    command: bash -c "run-worker.sh"
+    ports:
+      - "5001:9000"

@@ -1,0 +1,8 @@
+- download docker-compose with (apt  install docker-compose)
+- add apps folder
+- move everything from user init to here
+- provide env file for palate container (including OPENAI_API_KEY)
+- provide docker-compose file
+- provide crt, pem, etc.
+- provide nginx configs
+- provide postgres init db

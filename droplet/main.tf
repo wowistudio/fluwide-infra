@@ -23,65 +23,9 @@ resource "digitalocean_droplet" "fluwide" {
     timeout     = "2m"
   }
 
-  provisioner "file" {
-    source      = "../files/fluwidecom.conf"
-    destination = "/etc/nginx/sites-available/fluwidecom.conf"
-  }
-
-  provisioner "file" {
-    source      = "../files/jeroenlife.conf"
-    destination = "/etc/nginx/sites-available/jeroenlife.conf"
-  }
-
-  provisioner "file" {
-    source      = "../files/jeroenlife-cert.pem"
-    destination = "/etc/ssl/jeroenlife-cert.pem"
-  }
-
-  provisioner "file" {
-    source      = "../files/jeroenlife-key.pem"
-    destination = "/etc/ssl/jeroenlife-key.pem"
-  }
-
-  provisioner "file" {
-    source      = "../files/fluwide-cert.pem"
-    destination = "/etc/ssl/fluwide-cert.pem"
-  }
-
-  provisioner "file" {
-    source      = "../files/fluwide-key.pem"
-    destination = "/etc/ssl/fluwide-key.pem"
-  }
-
-  provisioner "file" {
-    source      = "../files/cloudflare.crt"
-    destination = "/etc/ssl/cloudflare.crt"
-  }
-
   provisioner "remote-exec" {
     inline = [
-      "export PATH=$PATH:/usr/bin",
-      # install nginx
-      "sudo apt update",
-      "sudo apt install -y nginx",
-
-      # install docker on the machine
-      "sudo apt-get update",
-      "sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common",
-      "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
-      "sudo add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable\"",
-      "apt-cache policy docker-ce",
-      "sudo apt install -y docker-ce",
-      "sudo systemctl status docker",
-
-      # if you want to let user xxx run docker without sudo
-      # "sudo usermod -aG docker xxx"
-      # "su - xxx"
-      # "groups"
-      "docker pull jphuisman92/fluwide:latest",
-      "docker run -p 3000:3000 -d jphuisman92/fluwide:latest",
-      "docker pull jphuisman92/jeroenlife:latest",
-      "docker run -p 4000:3000 -d jphuisman92/jeroenlife:latest",
+      "export PATH=$PATH:/usr/bin:/root/code/bin"
     ]
   }
 }

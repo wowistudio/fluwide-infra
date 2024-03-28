@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: update-cache
+      apt:
+        update_cache: yes
+    - name: install-packages
+      apt:
+        name: "{{ item }}"
+        state: present  # Ensure the package is present
+      with_items:
+        - tmux
+        - htop
+        - docker
+        - docker-compose
+        - telnet
+        - jq
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - nginx

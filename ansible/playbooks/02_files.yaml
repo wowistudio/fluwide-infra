@@ -1,0 +1,60 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: create-code-folder
+      file:
+        path: /root/code
+        state: directory
+    - name: copy-bin-files
+      copy:
+        force: yes
+        src: "{{ item }}"
+        dest: /root/code/bin
+        mode: '0755'
+      with_fileglob:
+        - ../files/bin/*
+      tags: bin
+    - name: add-bin-to-path
+      copy:
+        force: yes
+        dest: /etc/profile.d/code-bin.sh
+        content: 'PATH=$PATH:/root/code/bin'
+      tags: bin
+    - name: copy-docker-compose
+      copy:
+        force: yes
+        src: ../files/docker-compose.yaml
+        dest: /root/code/docker-compose.yaml
+#        mode: '0755'
+#        owner: root
+#        group: root
+      tags: docker
+    - name: copy-ssl-certs
+      copy:
+        force: yes
+        src: "{{ item }}"
+        dest: /etc/ssl/fluwide/
+      with_fileglob:
+        - ../files/certs/*.crt
+        - ../files/certs/*.pem
+      tags: nginx
+    - name: copy-nginx-default
+      copy:
+        force: yes
+        src: ../files/nginx/nginx.conf
+        dest: /etc/nginx/nginx.conf
+      tags: nginx
+    - name: copy-nginx-fluwide
+      copy:
+        force: yes
+        src: ../files/nginx/fluwidecom.conf
+        dest: /etc/nginx/sites-available/fluwidecom.conf
+      tags: nginx
+    - name: copy-nginx-jeroenlife
+      copy:
+        force: yes
+        src: ../files/nginx/jeroenlife.conf
+        dest: /etc/nginx/sites-available/jeroenlife.conf
+      tags: nginx

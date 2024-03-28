@@ -1,0 +1,4 @@
+all:
+  hosts:
+    fluwide:
+      ansible_host: fluwide

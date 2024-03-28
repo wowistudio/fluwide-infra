@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: start-palate
+      community.docker.docker_compose:
+        project_src: /root/code
+        pull: true
+        services:
+          - api
+          - worker
+      register: output
