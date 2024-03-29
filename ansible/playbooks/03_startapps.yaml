@@ -3,11 +3,23 @@
   become: yes
   gather_facts: no
   tasks:
+    - name: start-fluwide
+      community.docker.docker_compose:
+        project_src: /root/code
+        pull: true
+        services:
+          - fluwide
+          - life
     - name: start-palate
       community.docker.docker_compose:
         project_src: /root/code
         pull: true
         services:
-          - api
-          - worker
+          - palate-api
+          - palate-worker
       register: output
+    - name: restart-nginx
+      service:
+          name: nginx
+          state: restarted
+      tags: nginx

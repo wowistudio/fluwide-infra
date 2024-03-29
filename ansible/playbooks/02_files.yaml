@@ -9,12 +9,9 @@
         state: directory
     - name: copy-bin-files
       copy:
-        force: yes
-        src: "{{ item }}"
-        dest: /root/code/bin
+        src: ../files/bin/
+        dest: /root/code/bin/
         mode: '0755'
-      with_fileglob:
-        - ../files/bin/*
       tags: bin
     - name: add-bin-to-path
       copy:
@@ -22,6 +19,12 @@
         dest: /etc/profile.d/code-bin.sh
         content: 'PATH=$PATH:/root/code/bin'
       tags: bin
+    - name: add-palate-env
+      copy:
+        force: yes
+        src: ../files/.env.palate
+        dest: /root/code/.env.palate
+      tags: env
     - name: copy-docker-compose
       copy:
         force: yes

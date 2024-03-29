@@ -18,7 +18,7 @@ services:
     ports:
       - "6380:6379"
 
-  db:
+  palate-db:
     image: postgres:16
     environment:
       POSTGRES_DB: &PG_DB palate
@@ -44,7 +44,6 @@ services:
       # Django and application settings
       DJANGO_SETTINGS_MODULE: palate.settings.dev
       SECRET_KEY: secret
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
       # Database
       DB_HOST: db
       DB_NAME: *PG_DB
@@ -55,9 +54,9 @@ services:
       CELERY_RESULT_BACKEND: redis://redis/0
       CELERY_BROKER_URL: redis://redis/0
     env_file:
-      - /root/.env
+      - /root/code/.env.palate
     depends_on:
-      - db
+      - palate-db
       - redis
     volumes:
       - ./backend:/app/code:z
