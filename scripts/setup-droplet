@@ -13,4 +13,4 @@ docker pull jphuisman92/fluwide:latest
 docker run -p 3000:3000 -d jphuisman92/fluwide:latest
 
 docker pull jphuisman92/jeroenlife:latest
-docker run -p 4000:3000 -d jphuisman92/jeroenlife:latest
+docker run -p 3000:3000 -d jphuisman92/jeroenlife:latest

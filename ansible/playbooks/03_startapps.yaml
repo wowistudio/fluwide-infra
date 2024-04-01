@@ -10,6 +10,7 @@
         services:
           - fluwide
           - life
+      tags: fluwide
     - name: start-palate
       community.docker.docker_compose:
         project_src: /root/code
@@ -18,6 +19,7 @@
           - palate-api
           - palate-worker
       register: output
+      tags: palate
     - name: restart-nginx
       service:
           name: nginx

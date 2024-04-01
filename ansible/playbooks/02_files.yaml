@@ -3,10 +3,6 @@
   become: yes
   gather_facts: no
   tasks:
-    - name: create-code-folder
-      file:
-        path: /root/code
-        state: directory
     - name: copy-bin-files
       copy:
         src: ../files/bin/
@@ -19,45 +15,36 @@
         dest: /etc/profile.d/code-bin.sh
         content: 'PATH=$PATH:/root/code/bin'
       tags: bin
-    - name: add-palate-env
+    - name: add-code-folder
       copy:
         force: yes
-        src: ../files/.env.palate
-        dest: /root/code/.env.palate
-      tags: env
-    - name: copy-docker-compose
-      copy:
-        force: yes
-        src: ../files/docker-compose.yaml
-        dest: /root/code/docker-compose.yaml
-#        mode: '0755'
-#        owner: root
-#        group: root
-      tags: docker
+        src: ../files/code/
+        dest: /root/code/
+      tags: code
     - name: copy-ssl-certs
       copy:
         force: yes
-        src: "{{ item }}"
+        src: ../files/certs/
         dest: /etc/ssl/fluwide/
-      with_fileglob:
-        - ../files/certs/*.crt
-        - ../files/certs/*.pem
-      tags: nginx
+      tags: certs
+#    - name: copy-ssl-certs
+#      copy:
+#        force: yes
+#        src: ../files/certs/
+#        dest: /etc/ssl/fluwide/
+#        with_fileglob:
+#          - ../files/certs/*.crt
+#          - ../files/certs/*.pem
     - name: copy-nginx-default
       copy:
         force: yes
-        src: ../files/nginx/nginx.conf
+        src: ../files/nginx.conf
         dest: /etc/nginx/nginx.conf
       tags: nginx
-    - name: copy-nginx-fluwide
+    - name: copy-nginx-sites-enabled
       copy:
         force: yes
-        src: ../files/nginx/fluwidecom.conf
-        dest: /etc/nginx/sites-available/fluwidecom.conf
-      tags: nginx
-    - name: copy-nginx-jeroenlife
-      copy:
-        force: yes
-        src: ../files/nginx/jeroenlife.conf
-        dest: /etc/nginx/sites-available/jeroenlife.conf
-      tags: nginx
+        src: ../files/nginx-sites-enabled/
+        dest: /etc/nginx/sites-enabled/
+      tags:
+        - nginx

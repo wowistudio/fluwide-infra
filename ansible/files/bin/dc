@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker-compose --project-directory /root/code "$@"
+cd /root/code && docker-compose "$@"
