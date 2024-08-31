@@ -18,8 +18,12 @@
         services:
           - palate-api
           - palate-worker
-      register: output
-      tags: palate
+    - name: start-palate-other
+      community.docker.docker_compose:
+        project_src: /root/code
+        services:
+          - palate-db
+          - palate-redis
     - name: restart-nginx
       service:
           name: nginx

@@ -7,7 +7,7 @@ variable "private_key" {
 }
 
 resource "digitalocean_droplet" "fluwide" {
-  image    = "ubuntu-20-04-x64"
+  image    = "ubuntu-22-04-x64"
   name     = "fluwide"
   region   = "fra1"
   size     = "s-1vcpu-2gb"
@@ -50,6 +50,12 @@ resource "digitalocean_firewall" "fluwide" {
   inbound_rule {
     port_range       = "443"
     protocol         = "tcp"
+    source_addresses = ["0.0.0.0/0"]
+  }
+
+  inbound_rule {
+    port_range       = "1194"
+    protocol         = "udp"
     source_addresses = ["0.0.0.0/0"]
   }
 

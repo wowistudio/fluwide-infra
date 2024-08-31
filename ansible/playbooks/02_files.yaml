@@ -8,13 +8,13 @@
         src: ../files/bin/
         dest: /root/code/bin/
         mode: '0755'
-      tags: bin
+      tags: code
     - name: add-bin-to-path
       copy:
         force: yes
         dest: /etc/profile.d/code-bin.sh
         content: 'PATH=$PATH:/root/code/bin'
-      tags: bin
+      tags: code
     - name: add-code-folder
       copy:
         force: yes
