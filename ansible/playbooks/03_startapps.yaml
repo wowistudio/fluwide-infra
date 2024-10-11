@@ -4,28 +4,28 @@
   gather_facts: no
   tasks:
     - name: start-fluwide
-      community.docker.docker_compose:
+      community.docker.docker_compose_v2:
         project_src: /root/code
-        pull: true
+        pull: "always"
         services:
           - fluwide
           - life
       tags: fluwide
-    - name: start-palate
-      community.docker.docker_compose:
-        project_src: /root/code
-        pull: true
-        services:
-          - palate-api
-          - palate-worker
+#    - name: start-palate
+#      community.docker.docker_compose_v2:
+#        project_src: /root/code
+#        pull: "always"
+#        services:
+#          - palate-api
+#          - palate-worker
     - name: start-palate-other
-      community.docker.docker_compose:
+      community.docker.docker_compose_v2:
         project_src: /root/code
         services:
           - palate-db
           - palate-redis
-    - name: restart-nginx
-      service:
-          name: nginx
-          state: restarted
-      tags: nginx
+    - name: start-ng.inx
+      community.docker.docker_compose_v2:
+        project_src: /root/code
+        services:
+          - nginx

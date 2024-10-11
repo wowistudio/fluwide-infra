@@ -14,7 +14,6 @@
         - tmux
         - htop
         - docker
-        - docker-compose
         - telnet
         - jq
         - apt-transport-https
@@ -22,3 +21,25 @@
         - curl
         - software-properties-common
         - nginx
+    - name: Create directory for Docker CLI plugins
+      file:
+        path: /usr/local/lib/docker/cli-plugins
+        state: directory
+        mode: '0755'
+    - name: Download Docker Compose V2 binary
+      get_url:
+        url: https://github.com/docker/compose/releases/download/v2.18.0/docker-compose-linux-x86_64
+        dest: /usr/local/lib/docker/cli-plugins/docker-compose
+        mode: '0755'
+    - name: Make Docker Compose binary executable
+      file:
+        path: /usr/local/lib/docker/cli-plugins/docker-compose
+        mode: '0755'
+    - name: Verify Docker Compose installation
+      command: docker compose version
+      register: docker_compose_version
+      ignore_errors: yes
+    - name: Show Docker Compose version
+      debug:
+        msg: "{{ docker_compose_version.stdout }}"
+      when: docker_compose_version.rc == 0
